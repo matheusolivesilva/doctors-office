@@ -1,0 +1,20 @@
+version: '3'
+services:
+  app:
+    container_name: alura
+    image: ambientum/php:7.4-nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/var/www/app
+        #command: "composer install"
+  composer:
+    image: composer/composer
+    ports:
+        - "8081:8080"
+    volumes:
+        - ".:/composer"
+    container_name: composer
+    working_dir: /composer
+    command: install
+
