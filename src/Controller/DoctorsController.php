@@ -2,13 +2,20 @@
 namespace App\Controller;
 
 use App\Entity\Doctor;
-use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DoctorsController
 {
+    private $entityManager;
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * @Route("/doctors", methods={"POST"})
      */
@@ -20,7 +27,9 @@ class DoctorsController
         $doctor = new Doctor();
         $doctor->crm = $jsonData->crm;
         $doctor->name = $jsonData->name;
-
+        
+        $this->entityManager->persist($doctor);
+        $this->entityManager->flush();
         return new JsonResponse($doctor);
     }
 }
