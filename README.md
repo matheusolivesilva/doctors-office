@@ -1,5 +1,5 @@
 # Doctor's Office
-This Symfony API manages doctor's office. Can be used for an software which needs to: create, maintain and/or generate data about them.
+This Symfony API manages doctor's office. Can be used for a software which needs to: create, maintain and/or generate data about them.
 
 ## Installing and using
 1. First of all, you must to have docker installed in your machine ([follow the steps in documentation](https://docs.docker.com/get-docker/)]
