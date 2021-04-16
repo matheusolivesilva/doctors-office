@@ -7,7 +7,7 @@ This Symfony API manages doctor's office. Can be used for a software which needs
 ```bash 
 git clone https://github.com/matheusolivesilva/doctors-office.git
 ```
-3. Run ```bash docker-compose up ``` and access localhost:8080
+3. Run ```bash docker-compose up ``` and access [http://localhost:8080](http://localhost:8080)
 
 
 ## Built With
