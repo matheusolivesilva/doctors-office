@@ -51,15 +51,37 @@ class DoctorsController extends AbstractController
     /**
      * @Route("/doctors/{id}", methods={"GET"})
      */
-    public function getOne(Request $request): Response
+    public function getOne(int $id, Request $request): Response
     {
-        $id = $request->get('id');
         $repositoryOfDoctors = $this
             ->getDoctrine()
             ->getRepository(Doctor::class);
         $doctor = $repositoryOfDoctors->find($id);
         $statusCode = is_null($doctor) ? Response::HTTP_NO_CONTENT : 200;
         return new JsonResponse($doctor, $statusCode);
+    }
+    
+    /**
+     * @Route("/doctors/{id}", methods={"PUT"})
+     */
+    public function update(int $id, Request $request)
+    {
+        $requestBody = $request->getContent();
+        $jsonData = json_decode($requestBody);
+        $sentDoctor = new Doctor();
+        $sentDoctor->crm = $jsonData->crm;
+        $sentDoctor->name = $jsonData->name;
+        $repositoryOfDoctors = $this
+            ->getDoctrine()
+            ->getRepository(Doctor::class);
+        $existingDoctor = $repositoryOfDoctors->find($id);
+        if(is_null($existingDoctor)) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+        $existingDoctor->crm = $sentDoctor->crm;
+        $existingDoctor->name = $sentDoctor->name;
+        $this->entityManager->flush();
+        return new JsonResponse($existingDoctor);
     }
 }
 
