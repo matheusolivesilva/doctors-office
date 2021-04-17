@@ -76,6 +76,17 @@ class DoctorsController extends AbstractController
     }
 
     /**
+     * @Route("/doctors/{id}", methods={"DELETE"})
+     */
+    public function delete(int $id): Response
+    {
+        $doctor = $this->searchDoctor($id);
+        $this->entityManager->remove($doctor);
+        $this->entityManager->flush();
+        return new Response('', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
      * @param int $id
      * @return object\null
      */
