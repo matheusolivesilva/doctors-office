@@ -28,7 +28,7 @@ class SpecialitiesController extends AbstractController
         SpecialityRepository $specialityRepository
     ) {
         $this->entityManager = $entityManager;
-        $this->specialityRepository = $specialityRepository ;
+        $this->specialityRepository = $specialityRepository;
     }
 
     /**
@@ -61,5 +61,30 @@ class SpecialitiesController extends AbstractController
     public function searchSpeciality(int $id): Response
     {
         return new JsonResponse($this->specialityRepository->find($id));
+    }
+
+    /**
+     * @Route("/specialities/{id}", methods={"PUT"})
+     */
+    public function update(int $id, Request $request): Response
+    {
+        $requestData = $request->getContent();
+        $jsonData = json_decode($requestData);
+        $speciality = $this->specialityRepository->find($id);
+        $speciality
+            ->setDescription($jsonData->description);
+        $this->entityManager->flush();
+        return new JsonResponse($speciality);
+    }
+
+    /**
+     * @Route("/specialities/{id}", methods={"DELETE"})
+     */
+    public function delete(int $id): Response
+    {
+        $speciality = $this->specialityRepository->find($id);
+        $this->entityManager->remove($speciality);
+        $this->entityManager->flush();
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }
