@@ -1,7 +1,13 @@
 version: '3'
 services:
+  prepare_app:
+    container_name: prepare_app
+    build:
+        context: .
+        #    depends_on:
+        #        - mysql
   app:
-    container_name: alura
+    container_name: app
     image: ambientum/php:7.4-nginx
     ports:
       - "8080:8080"
@@ -9,20 +15,9 @@ services:
       - .:/var/www/app
     depends_on:
         - mysql
-    environment:
-        - MYSQL_USER=doctor
-        - MYSQL_PASS=123456
-  composer:
-    image: composer/composer
-    ports:
-        - "8081:8080"
-    volumes:
-        - ".:/composer"
-    container_name: composer
-    working_dir: /composer
-    command: install
   mysql:
     image: mysql:8.0.23
+    container_name: mysql
     volumes:
       - "db_data:/var/lib/mysql"
       - "./mysql/initial_data:/docker-entrypoint-initdb.d"
@@ -31,6 +26,9 @@ services:
     environment:
       - MYSQL_PASSWORD=123456
       - MYSQL_ROOT_PASSWORD=123456
+    depends_on:
+       - prepare_app
 
 volumes:
   db_data:
+      
