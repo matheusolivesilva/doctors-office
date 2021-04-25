@@ -2,10 +2,10 @@ version: '3'
 services:
   prepare_app:
     container_name: prepare_app
-    build:
-        context: .
-        #    depends_on:
-        #        - mysql
+    image: ambientum/php:7.4-nginx
+    volumes:
+      - .:/var/www/app
+    entrypoint: ./prepareapp.sh
   app:
     container_name: app
     image: ambientum/php:7.4-nginx
