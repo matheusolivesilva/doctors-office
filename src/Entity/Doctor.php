@@ -6,28 +6,55 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class Doctor
+class Doctor implements \JsonSerializable
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    public $id;
+    private $id;
     /**
      * @ORM\Column(type="integer")
      */
-    public $crm;
+    private $crm;
     /**
      * @ORM\Column(type="string")
      */
-    public $name;
-
+    private $name;
     /**
      * @ORM\ManyToOne(targetEntity=Speciality::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $speciality;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
+    public function getCrm(): ?int
+    {
+        return $this->crm;
+    }
+
+    public function setCrm(int $crm): self
+    {
+        $this->crm= $crm;
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+   
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
 
     public function getSpeciality(): ?Speciality
     {
@@ -41,5 +68,14 @@ class Doctor
         return $this;
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'crm' => $this->getCrm(),
+            'specialityId' => $this->getSpeciality()->getId()
+        ];
+    }
 }
 
