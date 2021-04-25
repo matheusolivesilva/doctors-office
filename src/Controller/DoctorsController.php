@@ -69,8 +69,9 @@ class DoctorsController extends AbstractController
         if(is_null($existingDoctor)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        $existingDoctor->crm = $sentDoctor->crm;
-        $existingDoctor->name = $sentDoctor->name;
+        $existingDoctor
+            ->setCrm($sentDoctor->getCrm())
+            ->setName($sentDoctor->getName());
         $this->entityManager->flush();
         return new JsonResponse($existingDoctor);
     }

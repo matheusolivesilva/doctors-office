@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Speciality;
+use App\Repository\SpecialityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,9 +18,17 @@ class SpecialitiesController extends AbstractController
      */
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    /**
+     * @var SpecialityRepository
+     */
+    private $specialityRepository;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        SpecialityRepository $specialityRepository
+    ) {
         $this->entityManager = $entityManager;
+        $this->specialityRepository = $specialityRepository ;
     }
 
     /**
@@ -34,5 +43,23 @@ class SpecialitiesController extends AbstractController
         $this->entityManager->persist($speciality);
         $this->entityManager->flush($speciality);
         return new JsonResponse($speciality, Response::HTTP_CREATED);
+    }
+
+
+    /**
+     * @Route("/specialities", methods={"GET"})
+     */
+    public function getAll(): Response
+    {
+        $specialityList = $this->specialityRepository->findAll();
+        return new JsonResponse($specialityList);
+    }
+
+    /**
+     * @Route("/specialities/{id}", methods={"GET"})
+     */
+    public function searchSpeciality(int $id): Response
+    {
+        return new JsonResponse($this->specialityRepository->find($id));
     }
 }
